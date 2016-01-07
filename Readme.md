@@ -1,7 +1,7 @@
 微信推送消息解析
 ---
-[![Build Status](https://travis-ci.org/liuxiaodong/weixin-trap.png)](https://travis-ci.org/liuxiaodong/wechat-xml-parser)
-[![Coverage Status](https://coveralls.io/repos/liuxiaodong/weixin-trap/badge.png)](https://coveralls.io/github/liuxiaodong/wechat-xml-parser)
+[![Build Status](https://travis-ci.org/liuxiaodong/wechat-xml-parser.png)](https://travis-ci.org/liuxiaodong/wechat-xml-parser)
+[![Coverage Status](https://coveralls.io/repos/liuxiaodong/wechat-xml-parser/badge.svg?branch=master&service=github)](https://coveralls.io/github/liuxiaodong/wechat-xml-parser?branch=master)
 
 
 ### 用法  

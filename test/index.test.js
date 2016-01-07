@@ -29,7 +29,7 @@ var createXml = function (need_encrypt){
 };
 
 describe('xml-parser', function(){
-  it.only('with default options and not encrypt', function(done){
+  it('with default options and not encrypt', function(done){
     var app = express();
     app.use(xmlParser());
     var xml = createXml();
