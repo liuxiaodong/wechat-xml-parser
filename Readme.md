@@ -10,7 +10,7 @@
 	var app = require('express')();
 	var xmlParser = require('wechat-xml-parser');
 
-	app.use(xmlPrrser(options));
+	app.use(xmlParser(options));
 
 	xml:  
 
