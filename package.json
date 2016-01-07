@@ -1,0 +1,37 @@
+{
+  "name": "wechat-xml-parser",
+  "version": "0.0.1",
+  "description": "wechat xml parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liuxiaodong/wechat-xml-parser.git"
+  },
+  "keywords": [
+    "wechat",
+    "weixin",
+    "xml",
+    "wechat-xml-parser"
+  ],
+  "author": "liuxiaodong <liuxiaodong1989@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liuxiaodong/wechat-xml-parser/issues"
+  },
+  "homepage": "https://github.com/liuxiaodong/wechat-xml-parser#readme",
+  "dependencies": {
+    "wechat-crypto": "0.0.2",
+    "xml2js": "^0.4.15"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.6",
+    "express": "^4.13.3",
+    "istanbul": "^0.4.1",
+    "mocha": "^2.3.4",
+    "should": "^8.0.2",
+    "supertest": "^1.1.0"
+  }
+}
