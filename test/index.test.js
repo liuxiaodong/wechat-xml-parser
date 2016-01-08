@@ -34,7 +34,6 @@ describe('xml-parser', function(){
     app.use(xmlParser());
     var xml = createXml();
     app.post('/test', function(req, res) {
-      console.log(JSON.stringify(req.body));
       var aroundBeacon = req.body.AroundBeacons.AroundBeacon;
       if (req.body.FromUserName === openid && req.body.ChosenBeacon.Uuid === '121212121212' && aroundBeacon[0].Uuid === '121212121212') {
         res.json({result: 'success'});
@@ -42,7 +41,6 @@ describe('xml-parser', function(){
         res.json({result: 'error'});
       }
     });
-    console.log(xml);
     request(app).post('/test')
     .set('Content-Type', 'application/xml')
     .send(xml)
@@ -67,6 +65,132 @@ describe('xml-parser', function(){
       }
     });
     request(app).put('/test')
+    .set('Content-Type', 'application/xml')
+    .send(xml)
+    .end(function(err, res){
+      if (err) {
+        return done(err);
+      }
+      res.body.result.should.equal('success');
+      done();
+    });
+  });
+
+  it('req._body=true', function(done){
+    var app = express();
+    app.use(function(req, res, next){
+      req._body = true;
+      next();
+    });
+    app.use(xmlParser());
+    var xml = createXml();
+    app.post('/test', function(req, res) {
+      if (!req.body) {
+        res.json({result: 'success'});
+      } else {
+        res.json({result: 'error'});
+      }
+    });
+    request(app).post('/test')
+    .set('Content-Type', 'application/xml')
+    .send(xml)
+    .end(function(err, res){
+      if (err) {
+        return done(err);
+      }
+      res.body.result.should.equal('success');
+      done();
+    });
+  });
+
+  it('req have not body', function(done){
+    var app = express();
+    app.use(function(req, res, next){
+      req.headers['transfer-encoding'] = undefined;
+      req.headers['content-length'] = undefined;
+      next();
+    });
+    app.use(xmlParser());
+    var xml = createXml();
+    app.post('/test', function(req, res) {
+      console.log(req.body);
+      if (!req.body) {
+        res.json({result: 'success'});
+      } else {
+        res.json({result: 'error'});
+      }
+    });
+    request(app).post('/test')
+    .set('Content-Type', 'application/xml')
+    .send(xml)
+    .end(function(err, res){
+      if (err) {
+        return done(err);
+      }
+      res.body.result.should.equal('success');
+      done();
+    });
+  });
+
+  it('Content-Type=application/json', function(done){
+    var app = express();
+    app.use(xmlParser());
+    var xml = createXml();
+    app.post('/test', function(req, res) {
+      if (!req.body) {
+        res.json({result: 'success'});
+      } else {
+        res.json({result: 'error'});
+      }
+    });
+    request(app).post('/test')
+    .set('Content-Type', 'application/json')
+    .send(xml)
+    .end(function(err, res){
+      if (err) {
+        return done(err);
+      }
+      res.body.result.should.equal('success');
+      done();
+    });
+  });
+
+  it('only accept text/xml', function(done){
+    var app = express();
+    app.use(xmlParser({types: 'text/xml'}));
+    var xml = createXml();
+    app.post('/test', function(req, res) {
+      if (!req.body) {
+        res.json({result: 'success'});
+      } else {
+        res.json({result: 'error'});
+      }
+    });
+    request(app).post('/test')
+    .set('Content-Type', 'application/xml')
+    .send(xml)
+    .end(function(err, res){
+      if (err) {
+        return done(err);
+      }
+      res.body.result.should.equal('success');
+      done();
+    });
+  });
+
+  it('only accept text/xml and application/xml', function(done){
+    var app = express();
+    app.use(xmlParser({types: ['text/xml', 'application/xml']}));
+    var xml = createXml();
+    app.post('/test', function(req, res) {
+      var aroundBeacon = req.body.AroundBeacons.AroundBeacon;
+      if (req.body.FromUserName === openid && req.body.ChosenBeacon.Uuid === '121212121212' && aroundBeacon[0].Uuid === '121212121212') {
+        res.json({result: 'success'});
+      } else {
+        res.json({result: 'error'});
+      }
+    });
+    request(app).post('/test')
     .set('Content-Type', 'application/xml')
     .send(xml)
     .end(function(err, res){

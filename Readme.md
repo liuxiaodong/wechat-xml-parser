@@ -91,6 +91,11 @@
 	* 默认为 keep
 ``` 
 
+`types:` 数据流的 Content-Type ，未匹配上则不处理 默认为 `['text/xml', 'application/xml', 'application/*+xml']`   
+
+* 也可以传入一个字符串 如 `application/xml`
+
+
 `token:`  公众号 token  
 `appid:`  公众号 appid  
 `encrypt_key:`  公众号加密 key  

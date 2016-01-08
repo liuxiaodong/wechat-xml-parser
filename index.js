@@ -3,6 +3,7 @@
 var debug = require('debug')('wechat-xml-parser');
 var parseString = require('xml2js').parseString;
 var WXBizMsgCrypt = require('wechat-crypto');
+var typeis = require('type-is');
 
 module.exports = middleware;
 
@@ -35,7 +36,7 @@ var attrFormats = {
 
 function middleware(options) {
   options = options || {};
-  var attrProcessors, dataProp = 'body';
+  var attrProcessors, dataProp = 'body', types = ['text/xml', 'application/xml', 'application/*+xml'];
   if (typeof options.attrFormat === 'function') {
     attrProcessors = options.attrFormat;
   } else {
@@ -54,27 +55,32 @@ function middleware(options) {
   if (typeof options.dataProp === 'string') {
     dataProp = options.dataProp;
   }
+
+  if (options.types && options.types.length) {
+    types = options.types;
+  }
+
   delete options.attrFormat;
   delete options.dataProp;
 
   return function wechatParser(req, res, next) {
-    /* istanbul ignore if */
-    if (req._body) return next();
     var method = req.method.toLowerCase();
-    if (method !== 'post') return next();
+    if (!typeis.hasBody(req) || req._body || method !== 'post' || !typeis(req, types)) {
+      return next();
+    }
     getBody(req, function(err, buf) {
       /* istanbul ignore if */
       if (err) {
         debug('get req body %j', err);
         return next();
       }
+      req._body = true;
       req.rawBuf = buf;
       parse(buf, options, attrProcessors, crypter, function(err, data){
         /* istanbul ignore if */
         if (err) {
           next();
         } else {
-          req._body = true;
           req[dataProp] = data || {};
           next();
         }
@@ -136,7 +142,7 @@ function parse(buf, parserOptions, attrProcessors, crypter, callback) {
     } else {
       callback(null, data);
     }
-  });  
+  });
 }
 
 function format(data, attrProcessors){
